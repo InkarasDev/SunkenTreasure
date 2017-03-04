@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class PlayerController : MonoBehaviour {
+public class Test : MonoBehaviour {
 
-	private Rigidbody2D rb;
+	private Rigidbody rb;
 	// Use this for initialization
 	void Start () {
-		rb = GetComponent<Rigidbody2D>();
+		rb = GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour {
 		float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
-        Vector2 movement = new Vector2(moveHorizontal, moveVertical);
+        Vector2 movement = new Vector3(moveHorizontal, moveVertical, 0.0f);
         rb.AddForce(movement * 1.0f);
 	}
 }
