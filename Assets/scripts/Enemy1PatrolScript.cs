@@ -9,10 +9,11 @@ public class Enemy1PatrolScript : MonoBehaviour {
 	private float incrementValue = 0.10f;
 	public float maxLeft;
 	public float maxRight;
+	public static int enemyHealth;
 	//public bool collided = false;
 
 	void Start () {
-		
+		enemyHealth = 2;
 	}
 	
 	void Update () {
