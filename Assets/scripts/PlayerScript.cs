@@ -9,18 +9,18 @@ public class PlayerScript : MonoBehaviour {
 	public static Rigidbody2D rb;
 
 	//shooting stuff
-
 	public GameObject shot;
 	public Transform shotSpawn;
 	private float fireRate, nextFire;
-
-	// Use this for initialization
+	void Awake() {
+        Application.targetFrameRate = 60;
+    }
 	void Start () {
 
 		rb = GetComponent<Rigidbody2D>();
+		fireRate = 1.0f;
 	}
 	
-	// Update is called once per frame
 	void Update () {
 		float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
@@ -33,26 +33,38 @@ public class PlayerScript : MonoBehaviour {
         	Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
         }
        	LimitSpeed();
-        
+        VelocityWhileIdle();
         
 	}
 
-	void OnCollisionEnter2D(Collision2D coll) 
-    {
+	void OnCollisionEnter2D(Collision2D coll) {
     
-        if (coll.gameObject.CompareTag("Enemies"))
-        {
+        if (coll.gameObject.CompareTag("Enemies")) {
         	
         	CollisionHandler();
         	
+        } else if (coll.gameObject.CompareTag("Enemies2")) {
+
+        	CollisionHandler(true);
+
+        } else if (coll.gameObject.CompareTag("oxygen")) {
+        	coll.gameObject.SetActive(false);
+        	TimeRemaining.timeRemaining += 5;
         }
     }
 
-    public void CollisionHandler() 
+    public void CollisionHandler(bool dead = false) 
     {
-    	PlayerHealth--;
-    	// Debug.Log(PlayerHealth);
-        //rb.AddForce(new Vector2(transform.position.x, transform.position.y + 2.00f));
+    	if (dead) {
+    		PlayerHealth = 0;
+    	} else {
+    		PlayerHealth--;
+    	}
+
+    	if (PlayerHealth <= 0) {
+    		gameObject.SetActive(false);
+    		Time.timeScale = 0.0f;
+    	}
     }
 
     private void LimitSpeed() {
@@ -70,5 +82,8 @@ public class PlayerScript : MonoBehaviour {
         }
     }
 
+    private void VelocityWhileIdle() {
+    	rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + 0.005f);
+    }
 
 }
