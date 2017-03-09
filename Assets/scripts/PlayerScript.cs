@@ -50,13 +50,16 @@ public class PlayerScript : MonoBehaviour {
         } else if (coll.gameObject.CompareTag("oxygen")) {
         	coll.gameObject.SetActive(false);
         	TimeRemaining.timeRemaining += 5;
+        } else if (coll.gameObject.CompareTag("hp")) {
+        	coll.gameObject.SetActive(false);
+        	PlayerHealth++;
         }
     }
 
     public void CollisionHandler(bool dead = false) 
     {
     	if (dead) {
-    		PlayerHealth = 0;
+    		PlayerHealth -= 2;
     	} else {
     		PlayerHealth--;
     	}
