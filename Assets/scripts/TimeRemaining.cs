@@ -17,6 +17,7 @@ public class TimeRemaining : MonoBehaviour {
   	}
   	void Update()
   	{
+        if (Time.timeScale != 1) {return;}
   	    timeRemaining -= Time.deltaTime;
   	    if (timeRemaining > 0) {
   	        //float minutes = Mathf.Floor(timeRemaining / 60);
@@ -26,10 +27,18 @@ public class TimeRemaining : MonoBehaviour {
   	    } else {
   	    	GameIsLost();
   	    }
-  	}
 
+        
+  	}
+    
+    void LateUpdate() {
+      if (PlayerScript.PlayerHealth <= 0) {
+          GameIsLost();
+        }
+    }
   	private void GameIsLost() 
   	{
+
   		gameIsLostText.SetActive(true);
   	}
 }

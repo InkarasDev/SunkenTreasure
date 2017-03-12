@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class PlayerScript : MonoBehaviour {
-	public static int PlayerHealth = 2;
+	public static int PlayerHealth;
 	public static Rigidbody2D rb;
 
 	//shooting stuff
@@ -16,7 +16,8 @@ public class PlayerScript : MonoBehaviour {
         Application.targetFrameRate = 60;
     }
 	void Start () {
-
+		PlayerHealth = 2;
+		Time.timeScale = 1.0f;
 		rb = GetComponent<Rigidbody2D>();
 		fireRate = 1.0f;
 	}
@@ -71,22 +72,43 @@ public class PlayerScript : MonoBehaviour {
     }
 
     private void LimitSpeed() {
-    	if (rb.velocity.y <= -3.0f) {
+    	if (SceneManager.GetActiveScene().buildIndex == 0) {
+    		if (rb.velocity.y <= -3.0f) {
         	rb.velocity =  new Vector2(rb.velocity.x, -3.0f);
-        }
-        if (rb.velocity.y >= 3.0f) {
-        	rb.velocity =  new Vector2(rb.velocity.x, 3.0f);
-        }
-        if (rb.velocity.x >= 3.0f) {
-        	rb.velocity =  new Vector2(3.0f, rb.velocity.y);
-        }
-        if (rb.velocity.x <= -3.0f) {
-        	rb.velocity =  new Vector2(-3.0f, rb.velocity.y);
-        }
+        	}
+        	if (rb.velocity.y >= 3.0f) {
+        		rb.velocity =  new Vector2(rb.velocity.x, 3.0f);
+        	}
+        	if (rb.velocity.x >= 3.0f) {
+        		rb.velocity =  new Vector2(3.0f, rb.velocity.y);
+        	}
+        	if (rb.velocity.x <= -3.0f) {
+        		rb.velocity =  new Vector2(-3.0f, rb.velocity.y);
+        	}
+    	} else {
+    		if (rb.velocity.y <= -3.0f) {
+        	rb.velocity =  new Vector2(rb.velocity.x, -3.0f);
+        	}
+        	if (rb.velocity.y >= 2.0f) {
+        		rb.velocity =  new Vector2(rb.velocity.x, 2.0f);
+        	}
+        	if (rb.velocity.x >= 3.0f) {
+        		rb.velocity =  new Vector2(3.0f, rb.velocity.y);
+        	}
+        	if (rb.velocity.x <= -3.0f) {
+        		rb.velocity =  new Vector2(-3.0f, rb.velocity.y);
+        	}
+    	}
+    	
     }
 
     private void VelocityWhileIdle() {
-    	rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + 0.005f);
+    	if (Time.timeScale != 1) {return;}
+		if (SceneManager.GetActiveScene().buildIndex == 0) {
+    		rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + 0.005f);
+    	} else {
+    		rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - 0.005f);
+    	}
     }
 
 }

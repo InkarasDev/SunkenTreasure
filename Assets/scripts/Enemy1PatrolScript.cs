@@ -17,7 +17,8 @@ public class Enemy1PatrolScript : MonoBehaviour {
 	}
 	
 	void Update () {
-
+        if (Time.timeScale != 1) {return;}
+        
         if (transform.position.x >= maxLeft && goLeft ) {
         	transform.position = new Vector2(transform.position.x - incrementValue , transform.position.y);
         	if (transform.position.x <= maxLeft) {
