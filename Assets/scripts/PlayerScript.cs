@@ -48,13 +48,20 @@ public class PlayerScript : MonoBehaviour {
 
         	CollisionHandler(true);
 
-        } else if (coll.gameObject.CompareTag("oxygen")) {
-        	coll.gameObject.SetActive(false);
+        } 
+    }
+
+    void OnTriggerEnter2D(Collider2D collided) 
+    {
+
+    	if (collided.gameObject.CompareTag("oxygen")) {
+        	collided.gameObject.SetActive(false);
         	TimeRemaining.timeRemaining += 5;
-        } else if (coll.gameObject.CompareTag("hp")) {
-        	coll.gameObject.SetActive(false);
+        } else if (collided.gameObject.CompareTag("hp")) {
+        	collided.gameObject.SetActive(false);
         	PlayerHealth++;
         }
+
     }
 
     public void CollisionHandler(bool dead = false) 
