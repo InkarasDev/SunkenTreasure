@@ -60,8 +60,8 @@ public class PlayerScript : MonoBehaviour {
         } else if (collided.gameObject.CompareTag("hp")) {
         	collided.gameObject.SetActive(false);
         	PlayerHealth++;
-        }
-
+        } 
+//
     }
 
     public void CollisionHandler(bool dead = false) 
