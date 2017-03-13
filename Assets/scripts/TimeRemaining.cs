@@ -13,7 +13,7 @@ public class TimeRemaining : MonoBehaviour {
 
   	void Start()
   	{
-  	    timeRemaining = 9900;
+  	    timeRemaining = 180;
   	}
   	void Update()
   	{
@@ -21,9 +21,10 @@ public class TimeRemaining : MonoBehaviour {
   	    timeRemaining -= Time.deltaTime;
   	    if (timeRemaining > 0) {
   	        //float minutes = Mathf.Floor(timeRemaining / 60);
-  	        float seconds = Mathf.Floor(timeRemaining % 60);
+  	        //float seconds = Mathf.Floor(timeRemaining % 60);
   	        //timer.text = " " + minutes.ToString("00") + ":" + seconds.ToString("00");
-  	        slider.value = seconds;
+            //Debug.Log(timeRemaining);
+  	        slider.value = timeRemaining;
   	    } else {
   	    	GameIsLost();
   	    }

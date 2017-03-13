@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class SharkPatrolScript : MonoBehaviour {
 
-	private bool goLeft = true;
-	private float incrementValue = 0.05f;
+	public bool goLeft = true;
+	private float incrementValue = 0.15f;
 	public float maxLeft;
 	public float maxRight;
 	public int enemyHealth;

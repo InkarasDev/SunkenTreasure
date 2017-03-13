@@ -16,9 +16,9 @@ public class CameraScript : MonoBehaviour {
     // late update runs after update, so we have updated values of this frame to work with instead of values from prev frame. 
 	void LateUpdate () {
         //transform.position = player.transform.position + offset;
-        if (player.transform.position.y >= -123.0f) {
+        if (player.transform.position.y >= -123.0f && player.transform.position.y <= 120.0f) {
         	transform.position = new Vector3(0.0f, player.transform.position.y, -1.0f);
-        	}
+        }
         
 	}
 }

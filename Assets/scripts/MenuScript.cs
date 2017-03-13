@@ -10,11 +10,19 @@ public class MenuScript : MonoBehaviour {
 	public Button restart;
 	public Button resume;
 	public Button exit;
+	public Button about;
+	public Button leaderboard;
+	public Button config;
+
 	// Use this for initialization
 	void Start () {
+		// listenerius mygtukam visiem.
 		restart.onClick.AddListener(RestartOnClick);
 		resume.onClick.AddListener(ResumeOnClick);
 		exit.onClick.AddListener(ExitOnClick);
+		about.onClick.AddListener(AboutOnClick);
+		leaderboard.onClick.AddListener(LeaderboardOnClick);
+		config.onClick.AddListener(ConfigOnClick);
 	}
 	
 	// Update is called once per frame
@@ -35,17 +43,22 @@ public class MenuScript : MonoBehaviour {
 	private void HideMenu()
 	{
 		Time.timeScale = 1.0f;
-		restart.gameObject.SetActive(false);
-		resume.gameObject.SetActive(false);
-		exit.gameObject.SetActive(false);
+
+		foreach (Transform child in transform)
+		{
+		  	child.gameObject.SetActive(false);
+		}
 	}
 
 	private void ShowMenu()
 	{
+		// pereinam per visus mygtukus menu
+		foreach (Transform child in transform)
+		{
+		  	child.gameObject.SetActive(true);
+		}
+
 		Time.timeScale = 0.0f;
-		restart.gameObject.SetActive(true);
-		resume.gameObject.SetActive(true);
-		exit.gameObject.SetActive(true);
 	}
 
 	private void RestartOnClick()
@@ -58,6 +71,21 @@ public class MenuScript : MonoBehaviour {
 	private void ResumeOnClick()
 	{
 		HideMenu();
+	}
+
+	private void ConfigOnClick()
+	{
+		//Application.Quit();
+	}
+
+	private void LeaderboardOnClick()
+	{
+		//Application.Quit();
+	}
+
+	private void AboutOnClick()
+	{
+		//Application.Quit();
 	}
 
 	private void ExitOnClick()

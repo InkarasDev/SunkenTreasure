@@ -6,23 +6,30 @@ using UnityEngine.SceneManagement;
 
 public class PlayerScript : MonoBehaviour {
 	public static int PlayerHealth;
+	public static int playerScore;
 	public static Rigidbody2D rb;
 	public Transform playerTransform;
 	//shooting stuff
 	public GameObject shot;
 	public Transform shotSpawn;
 	private float fireRate, nextFire;
-	void Awake() {
+
+	void Awake() 
+	{
         Application.targetFrameRate = 60;
     }
-	void Start () {
+
+	void Start () 
+	{
+		playerScore = 0;
 		PlayerHealth = 99;
 		Time.timeScale = 1.0f;
 		rb = GetComponent<Rigidbody2D>();
 		fireRate = 1.0f;
 	}
 	
-	void Update () {
+	void Update () 
+	{
 		float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
@@ -38,7 +45,8 @@ public class PlayerScript : MonoBehaviour {
         
 	}
 
-	void OnCollisionEnter2D(Collision2D coll) {
+	void OnCollisionEnter2D(Collision2D coll) 
+	{
     
         if (coll.gameObject.CompareTag("Enemies")) {
         	
@@ -49,27 +57,42 @@ public class PlayerScript : MonoBehaviour {
         	CollisionHandler(true);
 
         } else if (coll.gameObject.CompareTag("Background")) {
+
         	KnockAway();
-        } 
+
+        } else if (coll.gameObject.CompareTag("Obsticle")) {
+
+        	TimeRemaining.timeRemaining -= 5;
+
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collided) 
     {
 
     	if (collided.gameObject.CompareTag("oxygen")) {
+
         	collided.gameObject.SetActive(false);
-        	TimeRemaining.timeRemaining += 5;
+        	TimeRemaining.timeRemaining += 10;
+
         } else if (collided.gameObject.CompareTag("hp")) {
+
         	collided.gameObject.SetActive(false);
         	PlayerHealth++;
+
+        } else if (collided.gameObject.CompareTag("coin")) {
+
+        	collided.gameObject.SetActive(false);
+        	playerScore++;
+
         } 
-//
     }
 
-    public void CollisionHandler(bool dead = false) 
+    public void CollisionHandler(bool air = false) 
     {
-    	if (dead) {
-    		PlayerHealth -= 2;
+    	if (air) {
+    		TimeRemaining.timeRemaining -= 5;
+
     	} else {
     		PlayerHealth--;
     	}
@@ -80,7 +103,8 @@ public class PlayerScript : MonoBehaviour {
     	}
     }
 
-    private void LimitSpeed() {
+    private void LimitSpeed() 
+    {
     	if (SceneManager.GetActiveScene().buildIndex == 0) {
     		if (rb.velocity.y <= -3.0f) {
         	rb.velocity =  new Vector2(rb.velocity.x, -3.0f);
@@ -113,6 +137,7 @@ public class PlayerScript : MonoBehaviour {
 
     private void VelocityWhileIdle() {
     	if (Time.timeScale != 1) {return;}
+
 		if (SceneManager.GetActiveScene().buildIndex == 0) {
     		rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + 0.005f);
     	} else {
@@ -120,14 +145,17 @@ public class PlayerScript : MonoBehaviour {
     	}
     }
 
-    void KnockAway() {
+    void KnockAway() 
+    {
 
     	if (transform.position.x > 0) {
+    		
     		rb.AddForce(new Vector2(-10.0f, 0.0f) * 1.0f);
-    		//Debug.Log(transform.position.x);
+
     	} else {
+    		
     		rb.AddForce(new Vector2(10.0f, 0.0f) * 1.0f);
-    		//Debug.Log(transform.position.x);
+
     	}
     	
     }
