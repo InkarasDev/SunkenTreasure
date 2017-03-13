@@ -13,7 +13,7 @@ public class TimeRemaining : MonoBehaviour {
 
   	void Start()
   	{
-  	    timeRemaining = 50;
+  	    timeRemaining = 9900;
   	}
   	void Update()
   	{

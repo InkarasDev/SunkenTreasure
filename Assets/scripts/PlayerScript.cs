@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class PlayerScript : MonoBehaviour {
 	public static int PlayerHealth;
 	public static Rigidbody2D rb;
-
+	public Transform playerTransform;
 	//shooting stuff
 	public GameObject shot;
 	public Transform shotSpawn;
@@ -16,7 +16,7 @@ public class PlayerScript : MonoBehaviour {
         Application.targetFrameRate = 60;
     }
 	void Start () {
-		PlayerHealth = 2;
+		PlayerHealth = 99;
 		Time.timeScale = 1.0f;
 		rb = GetComponent<Rigidbody2D>();
 		fireRate = 1.0f;
@@ -26,7 +26,7 @@ public class PlayerScript : MonoBehaviour {
 		float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
-        Vector2 movement = new Vector3(moveHorizontal, moveVertical);
+        Vector2 movement = new Vector2(moveHorizontal, moveVertical);
         rb.AddForce(movement * 1.0f);
 
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > nextFire) {
@@ -48,6 +48,8 @@ public class PlayerScript : MonoBehaviour {
 
         	CollisionHandler(true);
 
+        } else if (coll.gameObject.CompareTag("Background")) {
+        	KnockAway();
         } 
     }
 
@@ -116,6 +118,18 @@ public class PlayerScript : MonoBehaviour {
     	} else {
     		rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - 0.005f);
     	}
+    }
+
+    void KnockAway() {
+
+    	if (transform.position.x > 0) {
+    		rb.AddForce(new Vector2(-10.0f, 0.0f) * 1.0f);
+    		//Debug.Log(transform.position.x);
+    	} else {
+    		rb.AddForce(new Vector2(10.0f, 0.0f) * 1.0f);
+    		//Debug.Log(transform.position.x);
+    	}
+    	
     }
 
 }

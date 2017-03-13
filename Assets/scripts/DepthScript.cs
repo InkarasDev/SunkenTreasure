@@ -15,6 +15,6 @@ public class DepthScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		float depth = Mathf.Floor(player.transform.position.y);
-		slider.value = 36.0f - depth;
+		slider.value = -depth;
 	}
 }

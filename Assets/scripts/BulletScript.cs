@@ -7,7 +7,7 @@ public class BulletScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//GameObject player = GameObject.FindWithTag("Player");
-		rigidbody = GetComponent<Rigidbody2D>();
+		//rigidbody = GetComponent<Rigidbody2D>();
 		rigidbody.velocity = transform.forward * 1000.0f;
 		rigidbody.AddForce(new Vector2(transform.position.x, -50.0f));
 		// -player.GetComponent<Rigidbody2D>().velocity.y
