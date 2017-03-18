@@ -46,7 +46,7 @@ public class TimeRemaining : MonoBehaviour {
 
     private IEnumerator SaveUserScore() 
     {
-      string highscore_url = "http://gceponisdev.16mb.com/saverecord.php";
+      string highscore_url = "http://gediminasceponis.000webhostapp.com/saverecord.php";
       WWWForm form = new WWWForm();
       form.AddField( "playerpoints", PlayerScript.playerScore );
       form.AddField( "playername", PlayerScript.playerName );

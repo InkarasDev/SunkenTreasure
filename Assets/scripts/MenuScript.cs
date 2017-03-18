@@ -13,9 +13,12 @@ public class MenuScript : MonoBehaviour {
 	public Button about;
 	public Button leaderboard;
 	public Button config;
+	public Button back;
 	public Text testText;
 	public Image leaderboardImage;
-	public GameObject playerScoreText;
+	public Image aboutUsImage;
+	public GameObject playerScoreName;
+	public GameObject playerScorePoints;
 	public static string iAmHoldingPlayerRecords;
 
 	// Use this for initialization
@@ -27,52 +30,64 @@ public class MenuScript : MonoBehaviour {
 		about.onClick.AddListener(AboutOnClick);
 		leaderboard.onClick.AddListener(LeaderboardOnClick);
 		config.onClick.AddListener(ConfigOnClick);
+		back.onClick.AddListener(BackOnClick);
 	}
 
 	void Update () {
-		if (TimeRemaining.timeRemaining <= 0 || PlayerScript.PlayerHealth <= 0) {
-			ShowMenu();
+
+
+		if (TimeRemaining.timeRemaining <= 0 || PlayerScript.PlayerHealth <= 0 ) {
+			if (Time.timeScale != 0) {
+				ShowMenu();
+				PauseGame();
+			}
+			
 		}
 	
-		if (Input.GetKeyDown(KeyCode.Escape) && PlayerScript.playerName.Length != 0) {
+		if (Input.GetKeyDown(KeyCode.Escape) && PlayerScript.playerName.Length != 0 && TimeRemaining.timeRemaining > 0 && PlayerScript.PlayerHealth > 0) {
+				
 			if (Time.timeScale != 1) {
 				HideMenu();
 				HideLeaderboard();
+				ResumeGame();
 			} else {
 				ShowMenu();
+				PauseGame();
 			}
+					
 		}
 	}
 
 	private void HideMenu()
 	{
-		ResumeGame();
-
+		Debug.Log("hiding");
 		foreach (Transform child in transform)
 		{
-			if (child.gameObject.CompareTag("playerrecord")) {
+			if (child.gameObject.CompareTag("playerrecord") ) {
+				// destroys copies of player records to save mem.
 				Destroy(child.gameObject);
+			} else if(child.gameObject.CompareTag("back")){
+				
+			} else {
+				child.gameObject.SetActive(false);
 			}
 
-		  	child.gameObject.SetActive(false);
-		  	
 		}
-		HideLeaderboard();
+		
 	}
 
 	private void ShowMenu()
 	{
+		
 		// pereinam per visus mygtukus menu
 		foreach (Transform child in transform)
 		{
-			if (!child.gameObject.CompareTag("playerrecord")) {
+			if (!child.gameObject.CompareTag("playerrecord") && !child.gameObject.CompareTag("back")) {
 				child.gameObject.SetActive(true);
 			}
 		  	
 		}
-
-		PauseGame();
-
+		// go fetch data about user scores so we can display leaderboard faster.
 		StartCoroutine(GetUsersRecords());
 	}
 
@@ -86,6 +101,7 @@ public class MenuScript : MonoBehaviour {
 	private void ResumeOnClick()
 	{
 		HideMenu();
+		ResumeGame();
 	}
 
 	private void ConfigOnClick()
@@ -93,33 +109,59 @@ public class MenuScript : MonoBehaviour {
 		//Application.Quit();
 	}
 
+	private void BackOnClick()
+	{	
+		HideMenu();
+		HideLeaderboard();
+		ShowMenu();
+		aboutUsImage.gameObject.SetActive(false);
+		
+	}
+
 	private void LeaderboardOnClick()
 	{
+		
+
 		HideMenu();
+		PauseGame();
+		ShowLeaderboard();
+
 		string result;
 		string[] playerScore; 
-		float yPosition = 510.00f;
-		ShowLeaderboard();
+		float yPosition = 480.00f;
+		
 		result = iAmHoldingPlayerRecords;
 		playerScore = result.Split('_');
 
 		foreach (string value in playerScore)
         {
+        	string[] row = value.Split(' ');
+        	
             Vector3 playerScorePosition = new Vector3(450.0f, yPosition, 0.0f);
-            GameObject go;
-			go=Instantiate(playerScoreText, playerScorePosition, Quaternion.Euler(0.0f,0.0f,0.0f)) as GameObject;	
-			go.transform.SetParent(transform);
-			go.transform.position = playerScorePosition;
-			playerScoreText.GetComponent<UnityEngine.UI.Text>().text = value;
+            Vector3 playerScorePositionName = new Vector3(520.0f, yPosition, 0.0f);
+            GameObject name;
+			name=Instantiate(playerScoreName, playerScorePositionName, Quaternion.Euler(0.0f,0.0f,0.0f)) as GameObject;	
+			name.transform.SetParent(transform);
+			name.transform.position = playerScorePositionName;
+
+			GameObject points;
+			points=Instantiate(playerScorePoints, playerScorePosition, Quaternion.Euler(0.0f,0.0f,0.0f)) as GameObject;	
+			points.transform.SetParent(transform);
+			points.transform.position = playerScorePosition;
+
+			points.GetComponent<UnityEngine.UI.Text>().text = row[0];
+			name.GetComponent<UnityEngine.UI.Text>().text = row[1];
+			
 			yPosition -= 40.0f;
         }
-
-        PauseGame();
+        
 	}
 
 	private void AboutOnClick()
 	{
-		
+		HideMenu();
+		aboutUsImage.gameObject.SetActive(true);
+		back.gameObject.SetActive(true);
 	}
 
 	private void ExitOnClick()
@@ -131,6 +173,7 @@ public class MenuScript : MonoBehaviour {
 	{
 
 		leaderboardImage.gameObject.SetActive(true);
+		back.gameObject.SetActive(true);
 
 	}
 
@@ -138,6 +181,7 @@ public class MenuScript : MonoBehaviour {
 	{
 
 		leaderboardImage.gameObject.SetActive(false);
+		back.gameObject.SetActive(false);
 
 	}
 
@@ -153,7 +197,7 @@ public class MenuScript : MonoBehaviour {
 
 	private IEnumerator GetUsersRecords() 
 	{
-		string highscore_url = "http://gceponisdev.16mb.com/getuserdata.php";
+		string highscore_url = "http://gediminasceponis.000webhostapp.com/getuserdata.php";
 	
 		WWWForm form = new WWWForm();
 		form.AddField( "a", "0" );
@@ -164,6 +208,7 @@ public class MenuScript : MonoBehaviour {
 		// Wait until the download is done
 		yield return download;
 		iAmHoldingPlayerRecords = download.text;
+
 		
 	}
 	// MZqhY5SmFCkc DB PW

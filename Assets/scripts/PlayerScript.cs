@@ -46,7 +46,7 @@ public class PlayerScript : MonoBehaviour {
         Vector2 movement = new Vector2(moveHorizontal, moveVertical);
         rb.AddForce(movement * 1.0f);
 
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time > nextFire) {
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > nextFire && Time.timeScale != 0) {
         	nextFire = Time.time + fireRate;
         	Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
         }
