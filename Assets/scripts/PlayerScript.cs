@@ -2,20 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
+using UnityEngine.SceneManagement; 
+using System.Runtime.Serialization.Formatters.Binary; 
+using System.IO;
 
 public class PlayerScript : MonoBehaviour {
 	public static int PlayerHealth;
 	public static int playerScore;
-	public static Rigidbody2D rb;
+	public static string playerName;
+	public Rigidbody2D rb;
 	public Transform playerTransform;
 	//shooting stuff
 	public GameObject shot;
 	public Transform shotSpawn;
 	private float fireRate, nextFire;
+	public InputField playerInput;
+
+	//private string leaderboardText;
 
 	void Awake() 
 	{
+		playerName = "";
         Application.targetFrameRate = 60;
     }
 
@@ -24,8 +31,11 @@ public class PlayerScript : MonoBehaviour {
 		playerScore = 0;
 		PlayerHealth = 99;
 		Time.timeScale = 1.0f;
-		rb = GetComponent<Rigidbody2D>();
+		
 		fireRate = 1.0f;
+		if (playerName.Length == 0 ) {
+			AskPlayerName();
+		}
 	}
 	
 	void Update () 
@@ -40,6 +50,18 @@ public class PlayerScript : MonoBehaviour {
         	nextFire = Time.time + fireRate;
         	Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
         }
+
+        if (playerName.Length == 0 && Input.GetKeyDown(KeyCode.Return)) {
+
+        	playerName = playerInput.text.ToString();
+
+        	if (playerName.Length != 0) {
+        		playerInput.gameObject.SetActive(false);
+        		Time.timeScale = 1.0f;
+        	}
+
+        }
+
        	LimitSpeed();
         VelocityWhileIdle();
         
@@ -74,7 +96,7 @@ public class PlayerScript : MonoBehaviour {
 
         	collided.gameObject.SetActive(false);
         	TimeRemaining.timeRemaining += 10;
-
+        	
         } else if (collided.gameObject.CompareTag("hp")) {
 
         	collided.gameObject.SetActive(false);
@@ -84,7 +106,7 @@ public class PlayerScript : MonoBehaviour {
 
         	collided.gameObject.SetActive(false);
         	playerScore++;
-
+        	
         } 
     }
 
@@ -158,6 +180,14 @@ public class PlayerScript : MonoBehaviour {
 
     	}
     	
+    }
+
+    private void AskPlayerName()
+    {
+
+    	playerInput.gameObject.SetActive(true);
+    	Time.timeScale = 0.0f;
+
     }
 
 }

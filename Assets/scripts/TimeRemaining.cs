@@ -13,7 +13,7 @@ public class TimeRemaining : MonoBehaviour {
 
   	void Start()
   	{
-  	    timeRemaining = 180;
+  	    timeRemaining = 5;
   	}
   	void Update()
   	{
@@ -37,9 +37,24 @@ public class TimeRemaining : MonoBehaviour {
           GameIsLost();
         }
     }
+
   	private void GameIsLost() 
   	{
-
   		gameIsLostText.SetActive(true);
+      StartCoroutine(SaveUserScore());
   	}
+
+    private IEnumerator SaveUserScore() 
+    {
+      string highscore_url = "http://gceponisdev.16mb.com/saverecord.php";
+      WWWForm form = new WWWForm();
+      form.AddField( "playerpoints", PlayerScript.playerScore );
+      form.AddField( "playername", PlayerScript.playerName );
+      // Create a download object
+      WWW download = new WWW( highscore_url, form );
+  
+      // Wait until the download is done
+      yield return download;
+  }
+
 }
