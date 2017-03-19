@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BulletScript : MonoBehaviour {
 	public Rigidbody2D rigidbody;
+	public GameObject explosion;
 	// Use this for initialization
 	void Start () {
 		//GameObject player = GameObject.FindWithTag("Player");
@@ -20,8 +21,17 @@ public class BulletScript : MonoBehaviour {
 
 	private void OnCollisionEnter2D(Collision2D coll) {
     	// cleans up the bullets that does not hit what we want them to 
-        if (!coll.gameObject.CompareTag("Enemies") || !coll.gameObject.CompareTag("Enemies2") ) {
-        	gameObject.SetActive(false);
-        }
+
+        // if (!coll.gameObject.CompareTag("Enemies") || !coll.gameObject.CompareTag("Enemies2") ) {
+        // 	gameObject.SetActive(false);
+        // } else {
+        	
+        	GameObject bulletExplosion;
+			bulletExplosion=Instantiate(explosion, transform.position, transform.rotation) as GameObject;
+			Destroy(gameObject);	
+			//StartCoroutine(RemoveExplosion(bulletExplosion));
+        //}
     }
+
+   
 }

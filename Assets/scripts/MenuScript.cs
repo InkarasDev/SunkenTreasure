@@ -60,7 +60,7 @@ public class MenuScript : MonoBehaviour {
 
 	private void HideMenu()
 	{
-		Debug.Log("hiding");
+		//Debug.Log("hiding");
 		foreach (Transform child in transform)
 		{
 			if (child.gameObject.CompareTag("playerrecord") ) {
@@ -94,7 +94,7 @@ public class MenuScript : MonoBehaviour {
 	private void RestartOnClick()
 	{
 		HideMenu();
-		SceneManager.LoadScene(0);
+		SceneManager.LoadScene(1);
 		ResumeGame();
 	}
 
@@ -128,7 +128,7 @@ public class MenuScript : MonoBehaviour {
 
 		string result;
 		string[] playerScore; 
-		float yPosition = 480.00f;
+		float yPosition = 560.00f;
 		
 		result = iAmHoldingPlayerRecords;
 		playerScore = result.Split('_');
@@ -137,8 +137,8 @@ public class MenuScript : MonoBehaviour {
         {
         	string[] row = value.Split(' ');
         	
-            Vector3 playerScorePosition = new Vector3(450.0f, yPosition, 0.0f);
-            Vector3 playerScorePositionName = new Vector3(520.0f, yPosition, 0.0f);
+            Vector3 playerScorePosition = new Vector3(700.0f, yPosition, 0.0f);
+            Vector3 playerScorePositionName = new Vector3(770.0f, yPosition, 0.0f);
             GameObject name;
 			name=Instantiate(playerScoreName, playerScorePositionName, Quaternion.Euler(0.0f,0.0f,0.0f)) as GameObject;	
 			name.transform.SetParent(transform);
@@ -207,8 +207,13 @@ public class MenuScript : MonoBehaviour {
 
 		// Wait until the download is done
 		yield return download;
-		iAmHoldingPlayerRecords = download.text;
-
+		// this handles php errors and/or no user records
+		if (download.text.Length == 0 || download.text.ToString()[0] == '<') {
+			iAmHoldingPlayerRecords = "No records";
+		} else {
+			iAmHoldingPlayerRecords = download.text;
+		}
+		
 		
 	}
 	// MZqhY5SmFCkc DB PW

@@ -17,25 +17,23 @@ public class PlayerScript : MonoBehaviour {
 	public Transform shotSpawn;
 	private float fireRate, nextFire;
 	public InputField playerInput;
-
+	private Animator animator;
 	//private string leaderboardText;
 
 	void Awake() 
 	{
-		playerName = "";
         Application.targetFrameRate = 60;
     }
 
 	void Start () 
-	{
+	{	
+
 		playerScore = 0;
 		PlayerHealth = 99;
 		Time.timeScale = 1.0f;
 		
 		fireRate = 1.0f;
-		if (playerName.Length == 0 ) {
-			AskPlayerName();
-		}
+		
 	}
 	
 	void Update () 
@@ -51,17 +49,6 @@ public class PlayerScript : MonoBehaviour {
         	Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
         }
 
-        if (playerName.Length == 0 && Input.GetKeyDown(KeyCode.Return)) {
-
-        	playerName = playerInput.text.ToString();
-
-        	if (playerName.Length != 0) {
-        		playerInput.gameObject.SetActive(false);
-        		Time.timeScale = 1.0f;
-        	}
-
-        }
-
        	LimitSpeed();
         VelocityWhileIdle();
         
@@ -73,18 +60,21 @@ public class PlayerScript : MonoBehaviour {
         if (coll.gameObject.CompareTag("Enemies")) {
         	
         	CollisionHandler();
+        	KnockUp(coll);
         	
         } else if (coll.gameObject.CompareTag("Enemies2")) {
 
         	CollisionHandler(true);
+        	KnockUp(coll);
 
         } else if (coll.gameObject.CompareTag("Background")) {
 
         	KnockAway();
 
         } else if (coll.gameObject.CompareTag("Obsticle")) {
-
+        	
         	TimeRemaining.timeRemaining -= 5;
+        	KnockUp(coll);
 
         }
     }
@@ -167,7 +157,7 @@ public class PlayerScript : MonoBehaviour {
     	}
     }
 
-    void KnockAway() 
+    private void KnockAway() 
     {
 
     	if (transform.position.x > 0) {
@@ -182,12 +172,17 @@ public class PlayerScript : MonoBehaviour {
     	
     }
 
-    private void AskPlayerName()
+    private void KnockUp(Collision2D coll)
     {
 
-    	playerInput.gameObject.SetActive(true);
-    	Time.timeScale = 0.0f;
+    	if (coll.gameObject.transform.position.y > transform.position.y) {
+    		rb.AddForce(new Vector2(0.0f, -20.0f) * 1.0f);
+    	} else {
+    		rb.AddForce(new Vector2(0.0f, 20.0f) * 1.0f);
+    	}
 
     }
+
+    
 
 }
