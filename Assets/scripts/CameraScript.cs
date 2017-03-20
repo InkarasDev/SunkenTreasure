@@ -1,17 +1,38 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CameraScript : MonoBehaviour {
 
 	public GameObject player;
     private Vector3 offset;
+    private AudioSource fxSound; 
+
+ 	public Slider MusicSlider;
+ 	public Slider FxSlider;
+ 	public Toggle MuteMusic;
+ 	public Toggle MuteFx;
+ 	public static float FxVolume;
+ 	public static bool FxNotMuted;
 	// Use this for initialization
 	void Start () {
-        // offset = transform.position - player.transform.position;
-        // Debug.Log(player.transform.position.x);
+
+      	fxSound = GetComponent<AudioSource> ();
+     	
 	}
 	
+	void Update() {
+		if (MuteMusic.isOn) {
+			fxSound.volume = MusicSlider.value;
+			} else {
+				fxSound.volume = 0.0f;
+			}
+		FxVolume = FxSlider.value;
+		FxNotMuted = MuteFx.isOn;
+		
+
+	}
 	// Update is called once per frame
     // late update runs after update, so we have updated values of this frame to work with instead of values from prev frame. 
 	void LateUpdate () {

@@ -14,11 +14,13 @@ public class MenuScript : MonoBehaviour {
 	public Button leaderboard;
 	public Button config;
 	public Button back;
+	public Button backConfig;
 	public Text testText;
 	public Image leaderboardImage;
 	public Image aboutUsImage;
 	public GameObject playerScoreName;
 	public GameObject playerScorePoints;
+	public GameObject sounds;
 	public static string iAmHoldingPlayerRecords;
 
 	// Use this for initialization
@@ -31,11 +33,12 @@ public class MenuScript : MonoBehaviour {
 		leaderboard.onClick.AddListener(LeaderboardOnClick);
 		config.onClick.AddListener(ConfigOnClick);
 		back.onClick.AddListener(BackOnClick);
+		backConfig.onClick.AddListener(BackOnClick);
 	}
 
 	void Update () {
 
-
+		// ziuri ar ddar nepralosei
 		if (TimeRemaining.timeRemaining <= 0 || PlayerScript.PlayerHealth <= 0 ) {
 			if (Time.timeScale != 0) {
 				ShowMenu();
@@ -43,7 +46,7 @@ public class MenuScript : MonoBehaviour {
 			}
 			
 		}
-	
+		// leidzia isjungt menu tik td, jei dar nesi praloses
 		if (Input.GetKeyDown(KeyCode.Escape) && PlayerScript.playerName.Length != 0 && TimeRemaining.timeRemaining > 0 && PlayerScript.PlayerHealth > 0) {
 				
 			if (Time.timeScale != 1) {
@@ -68,6 +71,8 @@ public class MenuScript : MonoBehaviour {
 				Destroy(child.gameObject);
 			} else if(child.gameObject.CompareTag("back")){
 				
+			} else if (child.gameObject.CompareTag("sounds")) {
+
 			} else {
 				child.gameObject.SetActive(false);
 			}
@@ -106,7 +111,8 @@ public class MenuScript : MonoBehaviour {
 
 	private void ConfigOnClick()
 	{
-		//Application.Quit();
+		HideMenu();
+		sounds.gameObject.SetActive(true);
 	}
 
 	private void BackOnClick()
@@ -115,6 +121,7 @@ public class MenuScript : MonoBehaviour {
 		HideLeaderboard();
 		ShowMenu();
 		aboutUsImage.gameObject.SetActive(false);
+		sounds.gameObject.SetActive(false);
 		
 	}
 
@@ -128,7 +135,7 @@ public class MenuScript : MonoBehaviour {
 
 		string result;
 		string[] playerScore; 
-		float yPosition = 560.00f;
+		float yPosition = 200.00f;
 		
 		result = iAmHoldingPlayerRecords;
 		playerScore = result.Split('_');
@@ -137,8 +144,8 @@ public class MenuScript : MonoBehaviour {
         {
         	string[] row = value.Split(' ');
         	
-            Vector3 playerScorePosition = new Vector3(700.0f, yPosition, 0.0f);
-            Vector3 playerScorePositionName = new Vector3(770.0f, yPosition, 0.0f);
+            Vector3 playerScorePosition = new Vector3(leaderboardImage.gameObject.transform.position.x + 10.0f, leaderboardImage.gameObject.transform.position.y + yPosition, 0.0f);
+            Vector3 playerScorePositionName = new Vector3(leaderboardImage.gameObject.transform.position.x + 80.0f, leaderboardImage.gameObject.transform.position.y + yPosition, 0.0f);
             GameObject name;
 			name=Instantiate(playerScoreName, playerScorePositionName, Quaternion.Euler(0.0f,0.0f,0.0f)) as GameObject;	
 			name.transform.SetParent(transform);

@@ -13,6 +13,12 @@ public class StartGameScript : MonoBehaviour {
 		StartGameButton.onClick.AddListener(StartGameButtonOnClick);
 	}
 	
+	void Update() {
+		if (Input.GetKeyDown(KeyCode.Return) ) {
+			StartGameButtonOnClick();
+		}
+	}
+
 	private void StartGameButtonOnClick() 
 	{
 

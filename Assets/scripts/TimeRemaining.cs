@@ -10,31 +10,31 @@ public class TimeRemaining : MonoBehaviour {
 	public Text timer;
 	public GameObject gameIsLostText;
 	public Slider slider;
+  private bool lost;
 
   	void Start()
   	{
-  	    timeRemaining = 3000;
+  	    timeRemaining = 180;
+        lost = false;
   	}
   	void Update()
   	{
         if (Time.timeScale != 1) {return;}
   	    timeRemaining -= Time.deltaTime;
   	    if (timeRemaining > 0) {
-  	        //float minutes = Mathf.Floor(timeRemaining / 60);
-  	        //float seconds = Mathf.Floor(timeRemaining % 60);
-  	        //timer.text = " " + minutes.ToString("00") + ":" + seconds.ToString("00");
-            //Debug.Log(timeRemaining);
   	        slider.value = timeRemaining;
-  	    } else {
-  	    	GameIsLost();
-  	    }
+  	    } 
 
         
   	}
     
     void LateUpdate() {
-      if (PlayerScript.PlayerHealth <= 0) {
-          GameIsLost();
+      if (PlayerScript.PlayerHealth <= 0 || timeRemaining <= 0) {
+          if (!lost) {
+            GameIsLost();
+            lost = true;
+          }
+          
         }
     }
 
