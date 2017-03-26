@@ -12,7 +12,7 @@ public class PlayerScript : MonoBehaviour {
 	public static string playerName;
 	public Rigidbody2D rb;
 	public Transform playerTransform;
-	private CapsuleCollider2D playerCollider;
+	public Collider2D enemyCollider;
 
 	//shooting stuff
 	public GameObject shot;
@@ -27,11 +27,6 @@ public class PlayerScript : MonoBehaviour {
 	private Animator currentPlayerAnimator;
 	private Animator onHitAnimator;
 	public GameObject onHitPositionAndAnimationGameObject;
-	// public Transform upperHitPosition;
-	// public Transform lowerHitPosition;
-	// public Transform leftHitPosition;
-	// public Transform rightHitPosition;
-	//private string leaderboardText;
 
 	void Awake() 
 	{
@@ -40,8 +35,7 @@ public class PlayerScript : MonoBehaviour {
 
 	void Start () 
 	{	
-		playerCollider = GetComponent<CapsuleCollider2D> ();
-		
+
 		audtioNotPlaying = true;
 		ouchSound = GetComponent<AudioSource> ();
 		ouchSound.Stop();
@@ -66,18 +60,19 @@ public class PlayerScript : MonoBehaviour {
         }
 
        	LimitSpeed();
-        //VelocityWhileIdle();
 
         if(Input.anyKey == false) {
 			SlowDown();
 		}
 
 		if (PlayerHealth <= 0 || TimeRemaining.timeRemaining <= 0) {
-			//ouchSound.Stop();
 			if (CameraScript.FxNotMuted && audtioNotPlaying) {
 			ouchSound.clip = lostAudio;
     		ouchSound.volume = CameraScript.FxVolume;
-    		ouchSound.Play();
+    		if (CameraScript.FxNotMuted) {
+    			ouchSound.Play();
+    		}
+    		
     		audtioNotPlaying = false;
     		}
 		}
@@ -92,7 +87,9 @@ public class PlayerScript : MonoBehaviour {
         	CollisionHandler();
         	KnockUp(coll);
         	AddOnHitAnimation(coll);
-        	
+        	enemyCollider = coll.gameObject.GetComponent<Collider2D>();
+        	DisableEnemyCollider(enemyCollider);
+
         } else if (coll.gameObject.CompareTag("Enemies2")) {
 
         	CollisionHandler(true);
@@ -118,19 +115,16 @@ public class PlayerScript : MonoBehaviour {
     	if (collided.gameObject.CompareTag("oxygen")) {
 
         	collided.gameObject.SetActive(false);
-        	//Destroy(collided.GameObject);
         	TimeRemaining.timeRemaining += 20;
         	
         } else if (collided.gameObject.CompareTag("hp")) {
 
         	collided.gameObject.SetActive(false);
-        	//Destroy(collided.gameObject);
         	PlayerHealth++;
 
         } else if (collided.gameObject.CompareTag("coin")) {
 
         	collided.gameObject.SetActive(false);
-        	//Destroy(collided.gameObject);
         	playerScore++;
         	
         } 
@@ -138,11 +132,7 @@ public class PlayerScript : MonoBehaviour {
 
     public void CollisionHandler(bool air = false) 
     {
-    	playerCollider.enabled = false;
-    	StartCoroutine (EnablePlayerColliderAfterOneSecond ());
-    	//StartCoroutine (ChangePlayersAnimationToPreviousOneAfterTwoSeconds ());
     	
- 		
     	if (CameraScript.FxNotMuted) {
     		ouchSound.volume = CameraScript.FxVolume;
     		ouchSound.Play();
@@ -155,18 +145,30 @@ public class PlayerScript : MonoBehaviour {
     		PlayerHealth--;
     	}
 
+    }
+
+    private void DisableEnemyCollider(Collider2D enemyCollider)
+    {
+
+		enemyCollider.isTrigger = true;
+    	StartCoroutine (EnableEnemyColliderAfterThreeSec (enemyCollider));
 
     }
-    // kai atsitrenkia i priesa, padarom, kad dar 1 sekundes i nieka negaletu atsitrenkt
-    private IEnumerator EnablePlayerColliderAfterOneSecond() {
-        yield return new WaitForSeconds (1.0f);
-        playerCollider.enabled = true;
+
+    //kai atsitrenkia i priesa, padarom, kad dar 1 sekundes i nieka negaletu atsitrenkt
+    private IEnumerator EnableEnemyColliderAfterThreeSec(Collider2D enemyCollider) 
+    {
+
+        yield return new WaitForSeconds (3.0f);
+        enemyCollider.isTrigger = false;
+        
     }
+
     // animacija grazinu i praeita po 2s.
-    private IEnumerator HideOnHitAnimationAfterOneLoop() {
+    private IEnumerator HideOnHitAnimationAfterOneLoop() 
+    {
         yield return new WaitForSeconds (0.25f);
         onHitPositionAndAnimationGameObject.gameObject.SetActive(false);
-        //Vector2 resetOnHitGameObejectPosition =  new Vector2(0.0f, 0.0f);
         onHitPositionAndAnimationGameObject.transform.position = transform.position;
     }
 
@@ -179,9 +181,8 @@ public class PlayerScript : MonoBehaviour {
     	onHitPositionAndAnimationGameObject.gameObject.SetActive(true);
     	StartCoroutine(HideOnHitAnimationAfterOneLoop ());
     	
- 		
-
     }
+
     private void LimitSpeed() 
     {
     	// neduod insvaziuot greiciau nei 2, bet kuria krpytim
@@ -215,7 +216,8 @@ public class PlayerScript : MonoBehaviour {
     	
     }
 
-    private void VelocityWhileIdle() {
+    private void VelocityWhileIdle() 
+    {
     	if (Time.timeScale != 1) {return;}
     	// duoda pluduriavimo efekta, arba skendimo antram lygy
 		if (SceneManager.GetActiveScene().buildIndex == 1) {

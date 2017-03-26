@@ -78,6 +78,8 @@ public class MenuScript : MonoBehaviour {
 			}
 
 		}
+		sounds.gameObject.SetActive(false);
+		aboutUsImage.gameObject.SetActive(false);
 		
 	}
 
@@ -135,7 +137,7 @@ public class MenuScript : MonoBehaviour {
 
 		string result;
 		string[] playerScore; 
-		float yPosition = 200.00f;
+		float yPosition = 150.00f;
 		
 		result = iAmHoldingPlayerRecords;
 		playerScore = result.Split('_');
@@ -144,8 +146,8 @@ public class MenuScript : MonoBehaviour {
         {
         	string[] row = value.Split(' ');
         	
-            Vector3 playerScorePosition = new Vector3(leaderboardImage.gameObject.transform.position.x + 10.0f, leaderboardImage.gameObject.transform.position.y + yPosition, 0.0f);
-            Vector3 playerScorePositionName = new Vector3(leaderboardImage.gameObject.transform.position.x + 80.0f, leaderboardImage.gameObject.transform.position.y + yPosition, 0.0f);
+            Vector3 playerScorePosition = new Vector3(leaderboardImage.gameObject.transform.position.x + 60.0f, leaderboardImage.gameObject.transform.position.y + yPosition, 0.0f);
+            Vector3 playerScorePositionName = new Vector3(leaderboardImage.gameObject.transform.position.x + 140.0f, leaderboardImage.gameObject.transform.position.y + yPosition, 0.0f);
             GameObject name;
 			name=Instantiate(playerScoreName, playerScorePositionName, Quaternion.Euler(0.0f,0.0f,0.0f)) as GameObject;	
 			name.transform.SetParent(transform);
