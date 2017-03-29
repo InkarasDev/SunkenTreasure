@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BulletScript : MonoBehaviour {
 	public Rigidbody2D rigidbody;
@@ -8,8 +9,16 @@ public class BulletScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		
-		rigidbody.velocity = transform.forward * 1000.0f;
-		rigidbody.AddForce(new Vector2(transform.position.x, -50.0f));
+		if (SceneManager.GetActiveScene().buildIndex == 1) {
+			rigidbody.velocity = transform.forward * 1000.0f;
+			rigidbody.AddForce(new Vector2(transform.position.x, -50.0f));
+		} else {
+			rigidbody.velocity = transform.forward * 1000.0f;
+			rigidbody.AddForce(new Vector2(transform.position.x, + 100.0f));
+			rigidbody.gravityScale = -1.0f;
+		
+		}
+		StartCoroutine(DestroyBulletAfter1Sec());
 	}
 
 	private void OnCollisionEnter2D(Collision2D coll) {
@@ -18,5 +27,11 @@ public class BulletScript : MonoBehaviour {
 			// istrina kulka
 			Destroy(gameObject);	
     }
+
+    private IEnumerator DestroyBulletAfter1Sec() 
+	{
+		yield return new WaitForSeconds (1.0f);
+		Destroy(gameObject);
+	}
    
 }

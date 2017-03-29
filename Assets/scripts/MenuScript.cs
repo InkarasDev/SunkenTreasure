@@ -34,6 +34,8 @@ public class MenuScript : MonoBehaviour {
 		config.onClick.AddListener(ConfigOnClick);
 		back.onClick.AddListener(BackOnClick);
 		backConfig.onClick.AddListener(BackOnClick);
+		// nuvaziuoja pasiimt zaideju duomenu.
+		StartCoroutine(GetUsersRecords());
 	}
 
 	void Update () {
@@ -47,7 +49,12 @@ public class MenuScript : MonoBehaviour {
 			
 		}
 		// leidzia isjungt menu tik td, jei dar nesi praloses
-		if (Input.GetKeyDown(KeyCode.Escape) && PlayerScript.playerName.Length != 0 && TimeRemaining.timeRemaining > 0 && PlayerScript.PlayerHealth > 0) {
+		if (
+			Input.GetKeyDown(KeyCode.Escape) 
+			&& PlayerScript.playerName.Length != 0 
+			&& TimeRemaining.timeRemaining > 0 
+			&& PlayerScript.PlayerHealth > 0
+			) {
 				
 			if (Time.timeScale != 1) {
 				HideMenu();

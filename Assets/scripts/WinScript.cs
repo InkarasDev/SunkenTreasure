@@ -22,24 +22,23 @@ public class WinScript : MonoBehaviour {
     	
         if (coll.gameObject.CompareTag("Player"))
         {
-        	if (!won) {
-        		GameIsWon();
-        		won = true;
-        	}
-        	
-        	
-
+        	if (!won) {GameIsWon();}
         }
     }
 
     private void GameIsWon() 
   	{
-  		StartCoroutine(SaveUserScore());
+      if (SceneManager.GetActiveScene().buildIndex == 2) {
+        won = true;
+  		  StartCoroutine(SaveUserScore());
+        } else {
+          SceneManager.LoadScene(2);
+        }
   	}
 
     private IEnumerator SaveUserScore() 
     {
-    
+      
       string highscore_url = "http://gediminasceponis.000webhostapp.com/saverecord.php";
       WWWForm form = new WWWForm();
       form.AddField( "playerpoints", PlayerScript.playerScore );
@@ -49,6 +48,7 @@ public class WinScript : MonoBehaviour {
   
       // Wait until the download is done
       yield return download;
-      SceneManager.LoadScene(1);
+      
+      
   }
 }

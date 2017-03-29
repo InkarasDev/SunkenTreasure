@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 public class RayPatrolScript : MonoBehaviour {
@@ -10,15 +11,23 @@ public class RayPatrolScript : MonoBehaviour {
 	public float maxUp;
 	public float maxDown;
 	public int enemyHealth;
-	//public bool collided = false;
+    private GameObject playerTransformPosition;
+    private bool shouldMoveBecausePlayerIsClose;
+	
+    
 
 	void Start () {
+        shouldMoveBecausePlayerIsClose = false;
+        playerTransformPosition = GameObject.FindWithTag("Player");
 		enemyHealth = 1;
+        InvokeRepeating("CheckIfPlayerIsClose", 0.0f, 1.0f);
+        
 	}
 	
 	void Update () {
         if (Time.timeScale != 1) {return;}
-        
+        if (!shouldMoveBecausePlayerIsClose) {return;}
+
         if (transform.position.y <= maxUp && goUp ) {
         	transform.position = new Vector2(transform.position.x, transform.position.y + incrementValue);
         	if (transform.position.y >= maxUp) {
@@ -49,9 +58,25 @@ public class RayPatrolScript : MonoBehaviour {
         }
     }
 
-	// void LateUpdate() {
-	// 	// collided is set to false after every frame, this is used to prevent collision event from firing twice on collision.
-	// 	collided = false;
-	// }
-	
+    private void CheckIfPlayerIsClose() {
+        
+        
+        float playerY = playerTransformPosition.transform.position.y;
+        float thisY = transform.position.y;
+        if (playerY < 0) {
+            playerY = -1 * playerY;
+        }
+        if (thisY < 0) {
+            thisY = -1 * thisY;
+        }
+        //Debug.Log(Mathf.Pow(playerY - thisY, 2));
+        if(Mathf.Pow(playerY - thisY, 2) < 80) {
+            shouldMoveBecausePlayerIsClose = true;
+        } else {
+            shouldMoveBecausePlayerIsClose = false;
+        }
+        
+    }
+
+  
 }

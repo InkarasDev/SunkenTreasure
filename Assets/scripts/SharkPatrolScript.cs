@@ -10,33 +10,20 @@ public class SharkPatrolScript : MonoBehaviour {
 	public float maxLeft;
 	public float maxRight;
 	public int enemyHealth;
-	//public bool collided = false;
-	//public Rigidbody2D rb;
-	// Use this for initialization
-	//private static float timeRemaining;
+    private GameObject playerTransformPosition;
+	private bool shouldMoveBecausePlayerIsClose;
 
 	void Start () {
-		// rb.velocity = transform.forward * 1000.0f;
-		// rb.AddForce(new Vector2(transform.position.x, -50.0f));
-		//timeRemaining = 5;
-		//enemyHealth = 1;
+        shouldMoveBecausePlayerIsClose = false;
+        playerTransformPosition = GameObject.FindWithTag("Player");
+	    InvokeRepeating("CheckIfPlayerIsClose", 0.0f, 1.0f);
 	}
 	
 	void Update () {
-		//timeRemaining -= Time.deltaTime;
-		//LimitSpeed();
-
-		// if (timeRemaining <= 0) {
-		// 	var randomInt = Random.Range(0,2);
-  //       	if (randomInt == 0) {
-  //       		rb.AddForce(new Vector2(100.0f, -200.0f) * 1.0f);
-  //       		} else {
-  //       			rb.AddForce(new Vector2(-100.0f, -200.0f) * 1.0f);
-  //       		}
-  //       	timeRemaining = 5;
-		// }
+		
 		if (Time.timeScale != 1) {return;}
-        
+        if (!shouldMoveBecausePlayerIsClose) {return;}
+
         if (transform.position.x >= maxLeft && goLeft ) {
         	transform.position = new Vector2(transform.position.x - incrementValue , transform.position.y);
         	if (transform.position.x <= maxLeft) {
@@ -64,46 +51,26 @@ public class SharkPatrolScript : MonoBehaviour {
         	}
         }
 
-        // if (coll.gameObject.CompareTag("Obsticle"))
-        // {	
-        	// var randomInt = Random.Range(0,2);
-        	// if (randomInt == 0) {
-        	// 	rb.AddForce(new Vector2(100.0f, 0.0f) * 1.0f);
-        	// 	} else {
-        	// 		rb.AddForce(new Vector2(-100.0f, 0.0f) * 1.0f);
-        	// 	}
-        	//Debug.Log(randomInt);
-        //}
+       
 	}
-	// limits speed in all directions to 1.
-	// void LimitSpeed() {
- //    	if (SceneManager.GetActiveScene().buildIndex == 0) {
- //    		if (rb.velocity.y <= -1.0f) {
- //        	rb.velocity =  new Vector2(rb.velocity.x, -1.0f);
- //        	}
- //        	if (rb.velocity.y >= 1.0f) {
- //        		rb.velocity =  new Vector2(rb.velocity.x, 1.0f);
- //        	}
- //        	if (rb.velocity.x >= 1.0f) {
- //        		rb.velocity =  new Vector2(1.0f, rb.velocity.y);
- //        	}
- //        	if (rb.velocity.x <= -1.0f) {
- //        		rb.velocity =  new Vector2(-1.0f, rb.velocity.y);
- //        	}
- //    	} else {
- //    		if (rb.velocity.y <= -1.0f) {
- //        	rb.velocity =  new Vector2(rb.velocity.x, -1.0f);
- //        	}
- //        	if (rb.velocity.y >= 1.0f) {
- //        		rb.velocity =  new Vector2(rb.velocity.x, 1.0f);
- //        	}
- //        	if (rb.velocity.x >= 1.0f) {
- //        		rb.velocity =  new Vector2(1.0f, rb.velocity.y);
- //        	}
- //        	if (rb.velocity.x <= -1.0f) {
- //        		rb.velocity =  new Vector2(-1.0f, rb.velocity.y);
- //        	}
- //    	}
-    	
- //    }
+
+	private void CheckIfPlayerIsClose() {
+        
+        
+        float playerY = playerTransformPosition.transform.position.y;
+        float thisY = transform.position.y;
+        if (playerY < 0) {
+            playerY = -1 * playerY;
+        }
+        if (thisY < 0) {
+            thisY = -1 * thisY;
+        }
+
+        if(Mathf.Pow(playerY - thisY, 2) < 80) {
+            shouldMoveBecausePlayerIsClose = true;
+        } else {
+            shouldMoveBecausePlayerIsClose = false;
+        }
+        
+    }
 }

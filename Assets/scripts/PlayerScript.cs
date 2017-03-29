@@ -13,6 +13,7 @@ public class PlayerScript : MonoBehaviour {
 	public Rigidbody2D rb;
 	public Transform playerTransform;
 	public Collider2D enemyCollider;
+	private bool canShoot;
 
 	//shooting stuff
 	public GameObject shot;
@@ -36,6 +37,7 @@ public class PlayerScript : MonoBehaviour {
 	void Start () 
 	{	
 
+		canShoot = true;
 		audtioNotPlaying = true;
 		ouchSound = GetComponent<AudioSource> ();
 		ouchSound.Stop();
@@ -55,8 +57,20 @@ public class PlayerScript : MonoBehaviour {
         rb.AddForce(movement * 1.0f);
 
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > nextFire && Time.timeScale != 0) {
-        	nextFire = Time.time + fireRate;
-        	Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+        	// kai atsitrenkia i priesa, 2 sec negali saut.
+        	if (canShoot) {
+        		nextFire = Time.time + fireRate;
+        		if (SceneManager.GetActiveScene().buildIndex == 1) {
+        			Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+        		} else {
+        			// kad antram lygi is virsaus saudytu
+        			Vector2 newShotSpawnPosition = new Vector2(shotSpawn.position.x, shotSpawn.position.y + 2.5f);
+        			// pasukam kulka kampu
+        			Instantiate(shot, newShotSpawnPosition, Quaternion.Euler(0, 0, 90));
+
+        		}
+        	}
+        	
         }
 
        	LimitSpeed();
@@ -152,6 +166,7 @@ public class PlayerScript : MonoBehaviour {
 
 		enemyCollider.isTrigger = true;
     	StartCoroutine (EnableEnemyColliderAfterThreeSec (enemyCollider));
+    	canShoot = false;
 
     }
 
@@ -159,8 +174,9 @@ public class PlayerScript : MonoBehaviour {
     private IEnumerator EnableEnemyColliderAfterThreeSec(Collider2D enemyCollider) 
     {
 
-        yield return new WaitForSeconds (3.0f);
+        yield return new WaitForSeconds (2.0f);
         enemyCollider.isTrigger = false;
+        canShoot = true;
         
     }
 

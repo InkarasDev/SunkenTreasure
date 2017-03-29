@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,7 +7,7 @@ public class CameraScript : MonoBehaviour {
 
 	public GameObject player;
     private Vector3 offset;
-    private AudioSource fxSound; 
+    private AudioSource musicSound; 
 
  	public Slider MusicSlider;
  	public Slider FxSlider;
@@ -18,15 +18,16 @@ public class CameraScript : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-      	fxSound = GetComponent<AudioSource> ();
+      	musicSound = GetComponent<AudioSource> ();
      	
 	}
 	
 	void Update() {
+
 		if (MuteMusic.isOn) {
-			fxSound.volume = MusicSlider.value;
+			musicSound.volume = MusicSlider.value;
 			} else {
-				fxSound.volume = 0.0f;
+				musicSound.volume = 0.0f;
 			}
 		FxVolume = FxSlider.value;
 		FxNotMuted = MuteFx.isOn;
