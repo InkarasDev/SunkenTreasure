@@ -53,6 +53,6 @@ public class TimeRemaining : MonoBehaviour {
       WWW download = new WWW( highscore_url, form );
       // Wait until the download is done
       yield return download;
-  }
+    }
 
 }

@@ -22,10 +22,12 @@ public class MenuScript : MonoBehaviour {
 	public GameObject playerScorePoints;
 	public GameObject sounds;
 	public static string iAmHoldingPlayerRecords;
+	private bool isDownloaded;
 
 	// Use this for initialization
 	void Start () 
 	{
+		isDownloaded = false;
 		// listenerius mygtukam visiem.
 		restart.onClick.AddListener(RestartOnClick);
 		resume.onClick.AddListener(ResumeOnClick);
@@ -37,6 +39,7 @@ public class MenuScript : MonoBehaviour {
 		backConfig.onClick.AddListener(BackOnClick);
 		// nuvaziuoja pasiimt zaideju duomenu.
 		StartCoroutine(GetUsersRecords());
+
 	}
 
 	void Update () 
@@ -56,6 +59,7 @@ public class MenuScript : MonoBehaviour {
 			&& PlayerScript.playerName.Length != 0 
 			&& TimeRemaining.timeRemaining > 0 
 			&& PlayerScript.PlayerHealth > 0
+			&& !WinScript.won
 			) {
 				
 			if (Time.timeScale != 1) {
@@ -110,12 +114,19 @@ public class MenuScript : MonoBehaviour {
 	private void RestartOnClick()
 	{
 		HideMenu();
-		SceneManager.LoadScene(1);
+		if (SceneManager.GetActiveScene().buildIndex == 3) {
+			SceneManager.LoadScene(0);
+		} else {
+			SceneManager.LoadScene(1);
+		}
+		WinScript.won = false;
+		PlayerScript.playerScore = 0;
 		ResumeGame();
 	}
 
 	private void ResumeOnClick()
 	{
+		if (WinScript.won) {return;}
 		HideMenu();
 		ResumeGame();
 	}
@@ -231,8 +242,14 @@ public class MenuScript : MonoBehaviour {
 		} else {
 			iAmHoldingPlayerRecords = download.text;
 		}
+		if (SceneManager.GetActiveScene().buildIndex == 3 && !isDownloaded) {
+			LeaderboardOnClick();
+			isDownloaded = true;
+		}
 		
 		
 	}
-	// MZqhY5SmFCkc DB PW
+	// 20 + 330 + 172 + 150 pusryciai
+	// 20 + 20 + 252 + 343 + 150 pietus
+	// 1457
 }

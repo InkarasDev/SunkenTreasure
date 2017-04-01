@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 public class SharkPatrolScript : MonoBehaviour {
 
 	public bool goLeft = true;
-	private float incrementValue = 0.15f;
+	private float incrementValue = 0.125f;
 	public float maxLeft;
 	public float maxRight;
 	public int enemyHealth;

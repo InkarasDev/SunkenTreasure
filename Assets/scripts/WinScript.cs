@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class WinScript : MonoBehaviour {
 
-	private bool won;
+	public static bool won;
 
 	void Start () 
   {
@@ -23,6 +23,7 @@ public class WinScript : MonoBehaviour {
   	{
       if (SceneManager.GetActiveScene().buildIndex == 2) {
         won = true;
+        SceneManager.LoadScene(3);
   		  StartCoroutine(SaveUserScore());
       } else {
           SceneManager.LoadScene(2);
@@ -40,7 +41,6 @@ public class WinScript : MonoBehaviour {
       WWW download = new WWW( highscore_url, form );
       // Wait until the download is done
       yield return download;
-      
-      
+            
   }
 }
