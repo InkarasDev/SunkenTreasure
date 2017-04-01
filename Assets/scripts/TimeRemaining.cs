@@ -17,25 +17,24 @@ public class TimeRemaining : MonoBehaviour {
   	    timeRemaining = 180;
         lost = false;
   	}
+
   	void Update()
   	{
         if (Time.timeScale != 1) {return;}
+        
   	    timeRemaining -= Time.deltaTime;
   	    if (timeRemaining > 0) {
   	        slider.value = timeRemaining;
   	    } 
-
-        
   	}
     
     void LateUpdate() {
       if (PlayerScript.PlayerHealth <= 0 || timeRemaining <= 0) {
-          if (!lost) {
-            GameIsLost();
-            lost = true;
-          }
-          
-        }
+        if (!lost) {
+          GameIsLost();
+          lost = true;
+        } 
+      }
     }
 
   	private void GameIsLost() 
@@ -52,7 +51,6 @@ public class TimeRemaining : MonoBehaviour {
       form.AddField( "playername", PlayerScript.playerName );
       // Create a download object
       WWW download = new WWW( highscore_url, form );
-  
       // Wait until the download is done
       yield return download;
   }

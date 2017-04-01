@@ -7,7 +7,8 @@ public class BulletScript : MonoBehaviour {
 	public Rigidbody2D rigidbody;
 	public GameObject explosion;
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
 		
 		if (SceneManager.GetActiveScene().buildIndex == 1) {
 			rigidbody.velocity = transform.forward * 1000.0f;
@@ -21,7 +22,8 @@ public class BulletScript : MonoBehaviour {
 		StartCoroutine(DestroyBulletAfter1Sec());
 	}
 
-	private void OnCollisionEnter2D(Collision2D coll) {
+	private void OnCollisionEnter2D(Collision2D coll) 
+	{
    
 			Instantiate(explosion, transform.position, transform.rotation);
 			// istrina kulka

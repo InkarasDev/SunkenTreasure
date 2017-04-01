@@ -7,12 +7,14 @@ public class ExplosionHandler : MonoBehaviour {
 
 	private AudioSource exploasionSound;
 
-	private IEnumerator KillOnAnimationEnd() {
+	private IEnumerator KillOnAnimationEnd() 
+    {
          yield return new WaitForSeconds (0.6f);
          Destroy (gameObject);
     }
  
-    void Start () {
+    void Start () 
+    {
     	exploasionSound = GetComponent<AudioSource> ();
        	StartCoroutine (KillOnAnimationEnd ());
 

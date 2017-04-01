@@ -24,7 +24,8 @@ public class MenuScript : MonoBehaviour {
 	public static string iAmHoldingPlayerRecords;
 
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
 		// listenerius mygtukam visiem.
 		restart.onClick.AddListener(RestartOnClick);
 		resume.onClick.AddListener(ResumeOnClick);
@@ -38,7 +39,8 @@ public class MenuScript : MonoBehaviour {
 		StartCoroutine(GetUsersRecords());
 	}
 
-	void Update () {
+	void Update () 
+	{
 
 		// ziuri ar ddar nepralosei
 		if (TimeRemaining.timeRemaining <= 0 || PlayerScript.PlayerHealth <= 0 ) {
@@ -144,7 +146,7 @@ public class MenuScript : MonoBehaviour {
 
 		string result;
 		string[] playerScore; 
-		float yPosition = 150.00f;
+		float yPosition = 170.00f;
 		
 		result = iAmHoldingPlayerRecords;
 		playerScore = result.Split('_');

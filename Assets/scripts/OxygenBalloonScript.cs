@@ -6,14 +6,15 @@ public class OxygenBalloonScript : MonoBehaviour {
 
 	public bool staticBalloon;
 	private float incrementValue;
-	private float limit;
+	private float patrolLimit;
 	private bool up;
 	public bool thisShouldWiggle;
 	private GameObject playerTransformPosition;
 	private bool shouldMoveBecausePlayerIsClose;
-	// Use this for initialization
-	void Start () {
-		limit = 0.25f;
+
+	void Start () 
+	{
+		patrolLimit = 0.25f;
 		incrementValue = 0.005f;
 		up = true;
 		shouldMoveBecausePlayerIsClose = false;
@@ -21,26 +22,26 @@ public class OxygenBalloonScript : MonoBehaviour {
 	    InvokeRepeating("CheckIfPlayerIsClose", 0.0f, 1.0f);
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	void Update () 
+	{
 		if (Time.timeScale != 1) { return;}
 		if (!shouldMoveBecausePlayerIsClose) {return;}
 
 		if (!staticBalloon && !thisShouldWiggle) {
 			transform.position = new Vector2(transform.position.x, transform.position.y + incrementValue);
 		} else if (!thisShouldWiggle) {
-			limit -= incrementValue;
-			if (limit >= 0 && up) {
+			patrolLimit -= incrementValue;
+			if (patrolLimit >= 0 && up) {
 				transform.position = new Vector2(transform.position.x, transform.position.y + incrementValue);
 			} else {
 				if (up) {
-					limit = 0.25f;
+					patrolLimit = 0.25f;
 				}
 
 				up = false;
 				transform.position = new Vector2(transform.position.x, transform.position.y - incrementValue);
-				if (limit <= 0) {
-					limit = 0.25f;
+				if (patrolLimit <= 0) {
+					patrolLimit = 0.25f;
 					up = true;
 				}
 			}
@@ -57,8 +58,8 @@ public class OxygenBalloonScript : MonoBehaviour {
 		transform.Rotate( new Vector3(transform.rotation.x, transform.rotation.y  + 10.0f, transform.rotation.z));
 	}
 
-	private void CheckIfPlayerIsClose() {
-        
+	private void CheckIfPlayerIsClose() 
+	{
         
         float playerY = playerTransformPosition.transform.position.y;
         float thisY = transform.position.y;
@@ -74,6 +75,5 @@ public class OxygenBalloonScript : MonoBehaviour {
         } else {
             shouldMoveBecausePlayerIsClose = false;
         }
-        
     }
 }

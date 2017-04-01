@@ -14,9 +14,9 @@ public class RayPatrolScript : MonoBehaviour {
     private GameObject playerTransformPosition;
     private bool shouldMoveBecausePlayerIsClose;
 	
-    
 
-	void Start () {
+	void Start () 
+    {
         shouldMoveBecausePlayerIsClose = false;
         playerTransformPosition = GameObject.FindWithTag("Player");
 		enemyHealth = 1;
@@ -24,7 +24,8 @@ public class RayPatrolScript : MonoBehaviour {
         
 	}
 	
-	void Update () {
+	void Update ()
+    {
         if (Time.timeScale != 1) {return;}
         if (!shouldMoveBecausePlayerIsClose) {return;}
 
@@ -66,10 +67,11 @@ public class RayPatrolScript : MonoBehaviour {
         if (playerY < 0) {
             playerY = -1 * playerY;
         }
+        
         if (thisY < 0) {
             thisY = -1 * thisY;
         }
-        //Debug.Log(Mathf.Pow(playerY - thisY, 2));
+
         if(Mathf.Pow(playerY - thisY, 2) < 80) {
             shouldMoveBecausePlayerIsClose = true;
         } else {

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,7 +8,7 @@ using System.IO;
 
 public class PlayerScript : MonoBehaviour {
 	public static int PlayerHealth;
-	public static int playerScore;
+	public static int playerScore = 0;
 	public static string playerName;
 	public Rigidbody2D rb;
 	public Transform playerTransform;
@@ -21,8 +21,12 @@ public class PlayerScript : MonoBehaviour {
 	private float fireRate, nextFire;
 
 	private AudioSource ouchSound;
-	public AudioClip lostAudio;
+	public AudioClip onHitSound;
+	public AudioClip oxygenSound;
+	public AudioClip coinSound;
+
 	private bool audtioNotPlaying;
+	private bool fxAllowedToPlay;
 	
 
 	private Animator currentPlayerAnimator;
@@ -41,11 +45,10 @@ public class PlayerScript : MonoBehaviour {
 		audtioNotPlaying = true;
 		ouchSound = GetComponent<AudioSource> ();
 		ouchSound.Stop();
-		playerScore = 0;
 		PlayerHealth = 5;
 		Time.timeScale = 1.0f;
 		fireRate = 1.0f;
-		
+
 	}
 	
 	void Update () 
@@ -79,18 +82,10 @@ public class PlayerScript : MonoBehaviour {
 			SlowDown();
 		}
 
-		if (PlayerHealth <= 0 || TimeRemaining.timeRemaining <= 0) {
-			if (CameraScript.FxNotMuted && audtioNotPlaying) {
-			ouchSound.clip = lostAudio;
-    		ouchSound.volume = CameraScript.FxVolume;
-    		if (CameraScript.FxNotMuted) {
-    			ouchSound.Play();
-    		}
-    		
-    		audtioNotPlaying = false;
-    		}
+		if (CameraScript.FxNotMuted) {
+			fxAllowedToPlay = true;
 		}
-        
+
 	}
 
 	void OnCollisionEnter2D(Collision2D coll) 
@@ -130,16 +125,19 @@ public class PlayerScript : MonoBehaviour {
 
         	collided.gameObject.SetActive(false);
         	TimeRemaining.timeRemaining += 20;
+        	PlayAppropriateSound(true);
         	
         } else if (collided.gameObject.CompareTag("hp")) {
 
         	collided.gameObject.SetActive(false);
         	PlayerHealth++;
-
+        	PlayAppropriateSound(true);
+        	
         } else if (collided.gameObject.CompareTag("coin")) {
 
         	collided.gameObject.SetActive(false);
         	playerScore++;
+        	PlayAppropriateSound(false);
         	
         } 
     }
@@ -148,6 +146,7 @@ public class PlayerScript : MonoBehaviour {
     {
     	
     	if (CameraScript.FxNotMuted) {
+    		ouchSound.clip = onHitSound;
     		ouchSound.volume = CameraScript.FxVolume;
     		ouchSound.Play();
     	}
@@ -281,6 +280,20 @@ public class PlayerScript : MonoBehaviour {
     	} else {
     		rb.AddForce(new Vector2(0.0f, 10.0f) * 1.0f);
     	}
+
+    }
+
+    private void PlayAppropriateSound(bool isOxygen)
+    {
+    	if (isOxygen) {
+    		ouchSound.clip = oxygenSound;
+    	} else {
+    		ouchSound.clip = coinSound;
+    	}
+    	if (fxAllowedToPlay) {
+			ouchSound.volume = CameraScript.FxVolume;
+    		ouchSound.Play();
+      	}
 
     }
 
