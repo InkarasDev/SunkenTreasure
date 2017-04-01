@@ -39,7 +39,6 @@ if ($playerPoints > $points) {
 	$query->execute();
 }
 
-// prepared statement to avoid sql injection.
 $query = $conn->prepare("INSERT INTO leaderboard (points, name) VALUES (?, ?)");
 $query->bind_param('ds', $playerPoints, $playerName);
 $query->execute();
