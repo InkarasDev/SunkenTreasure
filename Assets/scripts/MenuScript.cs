@@ -251,5 +251,7 @@ public class MenuScript : MonoBehaviour {
 	}
 	// 20 + 330 + 172 + 150 pusryciai
 	// 20 + 20 + 252 + 343 + 150 pietus
-	// 1457
+	// 500 + 50 + 250 + 20 + 50
+
+	// 2327
 }

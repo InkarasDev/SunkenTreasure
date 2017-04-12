@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class BulletScript : MonoBehaviour {
+
 	public Rigidbody2D rigidbody;
 	public GameObject explosion;
 	// Use this for initialization
@@ -11,10 +12,10 @@ public class BulletScript : MonoBehaviour {
 	{
 		
 		if (SceneManager.GetActiveScene().buildIndex == 1) {
-			rigidbody.velocity = transform.forward * 1000.0f;
+
 			rigidbody.AddForce(new Vector2(transform.position.x, -50.0f));
 		} else {
-			rigidbody.velocity = transform.forward * 1000.0f;
+
 			rigidbody.AddForce(new Vector2(transform.position.x, + 100.0f));
 			rigidbody.gravityScale = -1.0f;
 		
@@ -24,7 +25,6 @@ public class BulletScript : MonoBehaviour {
 
 	private void OnCollisionEnter2D(Collision2D coll) 
 	{
-   
 			Instantiate(explosion, transform.position, transform.rotation);
 			// istrina kulka
 			Destroy(gameObject);	

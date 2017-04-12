@@ -9,11 +9,13 @@ public class StartGameScript : MonoBehaviour {
 	public InputField playerInput;
 	public Button StartGameButton;
 	
-	void Start () {
+	void Start () 
+	{
 		StartGameButton.onClick.AddListener(StartGameButtonOnClick);
 	}
 	
-	void Update() {
+	void Update() 
+	{
 		if (Input.GetKeyDown(KeyCode.Return) ) {
 			StartGameButtonOnClick();
 		}
@@ -21,11 +23,9 @@ public class StartGameScript : MonoBehaviour {
 
 	private void StartGameButtonOnClick() 
 	{
-
 		if (playerInput.text.ToString().Length != 0 ) {
         	PlayerScript.playerName = playerInput.text.ToString();
         	SceneManager.LoadScene(1);
         }
-
 	}
 }

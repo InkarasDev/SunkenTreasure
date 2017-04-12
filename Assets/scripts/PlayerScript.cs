@@ -7,6 +7,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
 public class PlayerScript : MonoBehaviour {
+
 	public static int PlayerHealth;
 	public static int playerScore = 0;
 	public static string playerName;
@@ -15,7 +16,7 @@ public class PlayerScript : MonoBehaviour {
 	public Collider2D enemyCollider;
 	private bool canShoot;
 
-	//shooting stuff
+	//shooting staff
 	public GameObject shot;
 	public Transform shotSpawn;
 	private float fireRate, nextFire;
@@ -25,7 +26,6 @@ public class PlayerScript : MonoBehaviour {
 	public AudioClip oxygenSound;
 	public AudioClip coinSound;
 
-	private bool audtioNotPlaying;
 	private bool fxAllowedToPlay;
 	
 
@@ -33,31 +33,27 @@ public class PlayerScript : MonoBehaviour {
 	private Animator onHitAnimator;
 	public GameObject onHitPositionAndAnimationGameObject;
 
-	void Awake() 
-	{
-        Application.targetFrameRate = 60;
-    }
-
 	void Start () 
 	{	
 
 		canShoot = true;
-		audtioNotPlaying = true;
 		ouchSound = GetComponent<AudioSource> ();
 		ouchSound.Stop();
 		PlayerHealth = 5;
 		Time.timeScale = 1.0f;
-		fireRate = 1.0f;
+		fireRate = 0.5f;
+        nextFire = 0.0f;
 
 	}
 	
 	void Update () 
 	{
+        //movement staff
 		float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
         Vector2 movement = new Vector2(moveHorizontal, moveVertical);
-        rb.AddForce(movement * 1.0f);
+        rb.AddForce(movement);
 
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > nextFire && Time.timeScale != 0) {
         	// kai atsitrenkia i priesa, 2 sec negali saut.
@@ -73,7 +69,6 @@ public class PlayerScript : MonoBehaviour {
 
         		}
         	}
-        	
         }
 
        	LimitSpeed();
@@ -164,13 +159,13 @@ public class PlayerScript : MonoBehaviour {
     {
 
 		enemyCollider.isTrigger = true;
-    	StartCoroutine (EnableEnemyColliderAfterThreeSec (enemyCollider));
+    	StartCoroutine (EnableEnemyColliderAfterTwoSec (enemyCollider));
     	canShoot = false;
 
     }
 
-    //kai atsitrenkia i priesa, padarom, kad dar 1 sekundes i nieka negaletu atsitrenkt
-    private IEnumerator EnableEnemyColliderAfterThreeSec(Collider2D enemyCollider) 
+    //kai atsitrenkia i priesa, padarom, kad dar 2 sekundes i nieka negaletu atsitrenkt
+    private IEnumerator EnableEnemyColliderAfterTwoSec(Collider2D enemyCollider) 
     {
 
         yield return new WaitForSeconds (2.0f);
@@ -179,7 +174,7 @@ public class PlayerScript : MonoBehaviour {
         
     }
 
-    // animacija grazinu i praeita po 2s.
+    // animacija grazinu i praeita po 0.25s.
     private IEnumerator HideOnHitAnimationAfterOneLoop() 
     {
         yield return new WaitForSeconds (0.25f);
@@ -192,7 +187,11 @@ public class PlayerScript : MonoBehaviour {
     	// paziuri kurioj vietoj piest ta animacija
     	float xx = coll.gameObject.transform.position.x - transform.position.x;
     	float yy = coll.gameObject.transform.position.y - transform.position.y;
-    	onHitPositionAndAnimationGameObject.transform.position = new Vector2 (onHitPositionAndAnimationGameObject.transform.position.x + xx / 2, onHitPositionAndAnimationGameObject.transform.position.y + yy / 2);
+    	onHitPositionAndAnimationGameObject.transform.position = 
+        new Vector2 (
+            onHitPositionAndAnimationGameObject.transform.position.x + xx / 2,
+            onHitPositionAndAnimationGameObject.transform.position.y + yy / 2
+        );
     	onHitPositionAndAnimationGameObject.gameObject.SetActive(true);
     	StartCoroutine(HideOnHitAnimationAfterOneLoop ());
     	
@@ -229,17 +228,6 @@ public class PlayerScript : MonoBehaviour {
         	}
     	}
     	
-    }
-
-    private void VelocityWhileIdle() 
-    {
-    	if (Time.timeScale != 1) {return;}
-    	// duoda pluduriavimo efekta, arba skendimo antram lygy
-		if (SceneManager.GetActiveScene().buildIndex == 1) {
-    		rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y + 0.005f);
-    	} else {
-    		rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y - 0.005f);
-    	}
     }
 
     private void SlowDown() 
@@ -290,6 +278,7 @@ public class PlayerScript : MonoBehaviour {
     	} else {
     		ouchSound.clip = coinSound;
     	}
+
     	if (fxAllowedToPlay) {
 			ouchSound.volume = CameraScript.FxVolume;
     		ouchSound.Play();

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class DepthScript : MonoBehaviour {
 
 	public GameObject player;	
-	// Update is called once per frame
+
 	void Update () 
 	{
 		float yPlayerPos = player.transform.position.y + 580.00f;

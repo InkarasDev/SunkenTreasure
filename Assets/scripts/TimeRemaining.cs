@@ -28,7 +28,8 @@ public class TimeRemaining : MonoBehaviour {
   	    } 
   	}
     
-    void LateUpdate() {
+    void LateUpdate() 
+    {
       if (PlayerScript.PlayerHealth <= 0 || timeRemaining <= 0) {
         if (!lost) {
           GameIsLost();

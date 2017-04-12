@@ -6,12 +6,6 @@ using UnityEngine.UI;
 public class ExplosionHandler : MonoBehaviour {
 
 	private AudioSource exploasionSound;
-
-	private IEnumerator KillOnAnimationEnd() 
-    {
-         yield return new WaitForSeconds (0.6f);
-         Destroy (gameObject);
-    }
  
     void Start () 
     {
@@ -23,5 +17,11 @@ public class ExplosionHandler : MonoBehaviour {
 		} else {
 			exploasionSound.volume = 0.0f;
 		}
+    }
+
+    private IEnumerator KillOnAnimationEnd() 
+    {
+         yield return new WaitForSeconds (0.6f);
+         Destroy (gameObject);
     }
 }
